@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """
 This is a script to retrieve the latest blocklists from the online sources and as well as latest created blocklists from the offline sources and save it to OUTPUT_DIR (Retrieved_blocklists)
 We already provide a blocklists from online source which is at https://mcfp.felk.cvut.cz/publicDatasets/CTU-AIPP-BlackList/Latest/AIP-Alpha-latest.csv (you can visit it and change from the options that best suits you)
