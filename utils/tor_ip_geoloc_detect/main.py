@@ -168,7 +168,7 @@ def tor_exit_nodes():
     OUTPUT_DIR = os.path.join(os.getcwd(), "data", "tor_exits")
     if(not os.path.exists(OUTPUT_DIR)):
         os.makedirs(OUTPUT_DIR)
-    with open(os.path.join(os.getcwd(), "data", "tor_exits", "tor_exits_nodes.txt"), "w") as f:
+    with open(os.path.join(os.getcwd(), "data", "tor_exits", "tor_exits_nodes.csv"), "w") as f:
         for ip in TOR_IPS:
             f.write(ip + "\n")
 
