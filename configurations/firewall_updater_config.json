@@ -1,0 +1,9 @@
+{
+    "Retrieved_blocklists": {
+        "blocklists_offline": true,
+        "blocklists_online": true,
+        "pre_provided_blocklists_online":true
+    },
+    "tor_exits": true,
+    "_comment": "true means to add these ip in firewall , false means to not add"
+}

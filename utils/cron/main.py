@@ -9,6 +9,11 @@ from datetime import datetime, timedelta
 CONFIG = './configurations/cron_config.json'
 
 def create_cron():
+    # Check if the script is run with sudo
+    if os.geteuid() != 0:
+        print("This script requires root privileges. Please run with sudo.")
+        exit(1)
+
     # Check from config file if the user wants to automatically update the firewall rules
     with open(CONFIG) as f:
         data = json.load(f)
@@ -28,8 +33,11 @@ def create_cron():
             time_diff = start_time - current_time
             if time_diff.days < 0:
                 start_time += timedelta(days=1)
+
+            software_directory = os.getcwd()
+
             # Create a cron job on Linux for blocklist downloader
-            blocklist_command = f'(crontab -l ; echo "{start_time.minute} {start_time.hour} */{cron_frequency_hours} * * python3 {path_blocklists_downloader}") | crontab -'
+            blocklist_command = f'(crontab -l ; echo "{start_time.minute} {start_time.hour} */{cron_frequency_hours} * * python3 {path_blocklists_downloader} {software_directory}") | crontab -'
             subprocess.call(blocklist_command, shell=True)
             print("Blocklist downloader cron job created successfully!")
 
@@ -44,8 +52,6 @@ def create_cron():
         #     exit()
 
     if data['auto_update_firewall_with_IP']:
-        path_firewall_updater = os.path.curdir + "/utils/firewall_updater/main.py"
-
         if os_name == "Linux":
             cron_frequency_hours = data.get('cron_frequency_hours', 24)
             first_start_time = data.get('first_cron_start_time', "00:00 AM")
@@ -55,8 +61,15 @@ def create_cron():
             time_diff = start_time - current_time
             if time_diff.days < 0:
                 start_time += timedelta(days=1)
-            # Create a cron job on Linux for firewall updater
-            firewall_command = f'(crontab -l ; echo "{start_time.minute} {start_time.hour} */{cron_frequency_hours} * * python3 {path_firewall_updater}") | crontab -'
+
+            # Get the parent of the parent directory location
+            software_directory = os.getcwd()
+
+            # Specify the script location relative to the grandparent directory
+            firewall_updater_location = os.path.join(software_directory, 'utils', 'firewall_updater', 'main.py')
+
+            # Create a cron job on Linux
+            firewall_command = f'(crontab -l ; echo "{start_time.minute} {start_time.hour} */{cron_frequency_hours} * * python3 {firewall_updater_location} {software_directory}") | crontab -'
             subprocess.call(firewall_command, shell=True)
             print("Firewall updater cron job created successfully!")
 

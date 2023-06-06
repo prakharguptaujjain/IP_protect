@@ -8,12 +8,17 @@ import os
 import configparser
 import time
 import shutil
+import sys
 import gzip
 
+SOFTWARE_DIR=os.getcwd()
 RETRIEVE_FILE = "configurations/blocklists_downloader_config.ini"
-OUTPUT_DIR = "./data/Retrieved_blocklists"
+OUTPUT_DIR = "data/Retrieved_blocklists"
 
 def get_blocklists():
+    if not os.path.exists(OUTPUT_DIR):
+        os.makedirs(OUTPUT_DIR)
+
     # Load the configuration from the .ini file
     config = configparser.ConfigParser()
     config.read(RETRIEVE_FILE)
@@ -56,7 +61,7 @@ def get_blocklists():
         files = [f for f in files if f.endswith(".csv")]
         files = sorted(files, key=lambda f: os.path.getmtime(os.path.join(folder, f)), reverse=True)
         newest_file = files[0]
-        output_folder = os.path.join(OUTPUT_DIR, "Offline")
+        output_folder = os.path.join(OUTPUT_DIR, "blocklists_offline")
         if not os.path.exists(output_folder):
             os.makedirs(output_folder)
         output_file = os.path.join(output_folder, newest_file)
@@ -72,6 +77,9 @@ def delete_old_files():
     """
     Delete files in the OUTPUT_DIR that are older than the RETENTION_PERIOD_DAYS.
     """
+    if not os.path.exists(OUTPUT_DIR):
+        os.makedirs(OUTPUT_DIR)
+
     config = configparser.ConfigParser()
     config.read(RETRIEVE_FILE)
     RETENTION_PERIOD_DAYS = int(config["general"]["retention_period_days"])
@@ -87,7 +95,9 @@ def delete_old_files():
 
 
 if __name__ == "__main__":
-    if not os.path.exists(OUTPUT_DIR):
-        os.makedirs(OUTPUT_DIR)
+    if(len(sys.argv)>1):
+        SOFTWARE_DIR=sys.argv[1]
+        RETRIEVE_FILE = os.path.join(SOFTWARE_DIR,RETRIEVE_FILE)
+        OUTPUT_DIR = os.path.join(SOFTWARE_DIR,OUTPUT_DIR)
     delete_old_files()
     get_blocklists()
