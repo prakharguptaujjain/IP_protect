@@ -32,5 +32,5 @@ Run ```sudo deploy.sh``` to deploy the software.
 - Download tor exist nodes IPs
 - Delete old IPs from list automatically
 - Has a feature to Whitelist IP
-- Benchmark feature to reduce the number of IPs added on low end devices
+- Benchmarking feature to reduce the number of IPs added on low end devices
 - Automatically adds IPs to the firewall
