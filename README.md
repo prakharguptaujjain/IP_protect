@@ -17,7 +17,7 @@
 ### How to install
 Run below command to download the software
 ```
-git clone https://github.comprakharguptaujjain/IP_protectgit
+git clone https://github.comprakharguptaujjain/IP_protect.git
 cd IP_protect
 ```
 Run ```python3 setup.py``` to configure the software. If you want default settings then skip this step.
