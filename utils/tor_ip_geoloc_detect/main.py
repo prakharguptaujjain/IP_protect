@@ -11,6 +11,12 @@ import requests
 import gzip
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from tqdm import tqdm
+import json
+import sys
+
+SOFTWARE_DIR = os.getcwd()
+CONFIG="configurations/tor_ip_geoloc_detect_config.json"
+OUTPUT_DIR="data/tor_exits"
 
 def download_tor_ips():
     """
@@ -35,6 +41,7 @@ def is_tor(ip, TOR_IPS):
 
 def is_vpn(ip):
     """
+    [CURRENTLY NOT USABLE]
     Check if an IP belongs to a VPN provider
 
 
@@ -43,7 +50,9 @@ def is_vpn(ip):
 
 
 def get_geolocation(ip):
-    """Get geolocation of an IP address
+    """
+    [CURRENTLY NOT USABLE]
+    Get geolocation of an IP address
     
     NOT USABLE AS EVERY SITE HAS ONLY SOME FREE LIMITS, NEED TO SETUP OWN DATABASE FOR VPN IP OR FIND SOME OPEN SOURCE ONE
     """
@@ -51,6 +60,7 @@ def get_geolocation(ip):
 
 def process_file(file_path,output_subdir_path):
     """
+    [CURRENTLY NOT USABLE]
     Add columns to the latest .csv.gz file in the directory and save it as a new .csv.gz file with "advanced" suffix
     """
     TOR_IPS=download_tor_ips()
@@ -108,6 +118,7 @@ def process_file(file_path,output_subdir_path):
 
 def get_advance_csv():
     """
+    [CURRENTLY NOT USABLE]
     Create an advanced version of the CSV file with the following columns:
     - Tor
     - VPN
@@ -162,10 +173,14 @@ def tor_exit_nodes():
     """
     Get the list of Tor exit nodes
     """
+    with open(CONFIG, "r") as f:
+        data=json.load(f)
+    if not data["download_tor_exit_nodes_ips"]:
+        return
+        
     TOR_IPS = download_tor_ips()
     
     # save in ./data/tor_exits/tor_exits_nodes.txt
-    OUTPUT_DIR = os.path.join(os.getcwd(), "data", "tor_exits")
     if(not os.path.exists(OUTPUT_DIR)):
         os.makedirs(OUTPUT_DIR)
     with open(os.path.join(os.getcwd(), "data", "tor_exits", "tor_exits_nodes.csv"), "w") as f:
@@ -174,4 +189,8 @@ def tor_exit_nodes():
 
 
 if __name__ == "__main__":
+    if(len(sys.argv)>1):
+        SOFTWARE_DIR=sys.argv[1]
+        CONFIG=os.path.join(SOFTWARE_DIR,CONFIG)
+        OUTPUT_DIR=os.path.join(SOFTWARE_DIR,OUTPUT_DIR)
     tor_exit_nodes()

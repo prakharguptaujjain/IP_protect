@@ -1,1 +1,2 @@
-{"auto_download_blocklists": false,"auto_update_firewall_with_IP":false,"cron_frequency_hours": 24,"first_cron_start_time": "2:00 PM"}
+{"auto_download_blocklists": true,"auto_update_firewall_with_IP":true,
+"auto_download_tor_exit_nodes_ips":true,"cron_frequency_hours": 72,"first_cron_start_time": "2:00 PM"}

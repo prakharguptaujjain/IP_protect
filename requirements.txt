@@ -1,0 +1,4 @@
+termcolor
+configparser
+requests
+tqdm

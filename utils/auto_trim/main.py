@@ -27,7 +27,7 @@ def trim():
     TRIMMED_CNT = int(bench_value*TRIMMED_VALUE_CONSTANT)
     
     #blocklists folder
-    csvs_folders = './data/Retrieved_blocklists'
+    csvs_folders = './data'
 
     total_files = 0
     for root, dirs, files in os.walk(csvs_folders):
